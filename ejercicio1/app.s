@@ -146,9 +146,9 @@ fin_circulo:
 
 /*
 circulo:
-    mov x10, 100     // centroX
-    mov x11, 150     // centroY
-    mov x12, 100     // Radio
+    mov x10, 320     // centroX
+    mov x11, 480     // centroY
+    mov x12, 250     // Radio
 
     mov x13, SCREEN_WIDTH  // ancho
     mov x14, SCREEN_HEIGH  // alto
@@ -197,10 +197,10 @@ finFila:
     b cicloY
 
 finCirculo:
-*/
+  b InfLoop
 	//---------------------------------------------------------------
 	// Infinite Loop
- 
+*/ 
 seteo_rombo:
 //todo menos x4 puede cambiarse a conveniencia
 /*
