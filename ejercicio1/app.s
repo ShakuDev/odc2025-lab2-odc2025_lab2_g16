@@ -66,65 +66,6 @@ rect_x_loop:
 
 fin_rect:
 
-// INTENTO DE CIRCULO (QUIZAS SIRVA PARA TRIANGULO)
-/*
-
-dibujarCirculo:
-  movz x10, 0xff80, lsl 16
-  movk x10, 0xff00, lsl 00 // color verde
-
-  // Framebuffer: x20
-  mov x1, SCREEN_WIDTH// SCREEN_W: x1, SCREEN_H: x2
-
-  mov x11, 300        // Y inicial
-  mov x12, 50        // Diámetro
-  mov x13, 310        // X inicial izquierda
-  mov x14, 330        // X inicial derecha
-  mov x15, 1          // Delta expansión
-  mov x16, 0          // Iterador vertical
-  
-  lsr x19, x12, 1     // radio = diam / 2
-
-linea_circulo:
-  // x21 = ax actual (izquierda)
-  // x22 = bx actual (derecha)
-  sub x21, x13, x16, lsl #2  // x21 = x13 - 4*i
-  add x22, x14, x16, lsl #2  // x22 = x14 + 4*i
-
-  // Calcular dirección de inicio (x21, y)
-  mov x5, x11
-  mul x5, x5, x1
-  add x5, x5, x21
-  lsl x5, x5, 2
-  add x17, x20, x5
-
-  // Calcular dirección de fin (x22, y)
-  mov x6, x11
-  mul x6, x6, x1
-  add x6, x6, x22
-  lsl x6, x6, 2
-  add x18, x20, x6
-
-pintar_linea:
-  cmp x17, x18
-  bge siguiente_linea
-  stur w10, [x17]
-  add x17, x17, 4
-  b pintar_linea
-
-siguiente_linea:
-  cmp x16, x19
-  beq fin_circulo
-
-  add x11, x11, 1     // bajar una línea
-  add x16, x16, 1     // i++
-
-  b linea_circulo
-
-fin_circulo:
-
-*/
-
 	// Ejemplo de uso de gpios
 	//mov x9, GPIO_BASE
 
@@ -144,49 +85,46 @@ fin_circulo:
 	// efectivamente, su valor representará si GPIO 2 está activo
 	//lsr w11, w11, 1
 
-/*
+// -------------------- SOL DEL FONDO //
 circulo:
     mov x10, 320     // centroX
-    mov x11, 480     // centroY
-    mov x12, 250     // Radio
+    mov x11, 530     // centroY
+    mov x12, 320     // Radio
 
     mov x13, SCREEN_WIDTH  // ancho
     mov x14, SCREEN_HEIGH  // alto
-    mov x15, 0x2d00    // color
+    // color naranja
+    movz x15, 0xFC4B, lsl 16
+    movk x15, 0x08, lsl 00
+    // fin color
 
-    mov x1, 0              // y = 0
+    mov x1, 0              // asignamos y = 0
 cicloY:
     cmp x1, x14
     bge finCirculo
 
-    mov x2, 0              // x = 0
+    mov x2, 0              // asignamos x = 0
 cicloX:
     cmp x2, x13
     bge finFila
 
-    // dx = x - centroX
-    sub x3, x2, x10
-    // dy = y - centroY
-    sub x4, x1, x11
-    // dx^2
-    mul x3, x3, x3
-    // dy^2
-    mul x4, x4, x4
-    // distancia² = dx^2 + dy^2
-    add x5, x3, x4
+    sub x3, x2, x10        // x3 = x - centroX
+    sub x4, x1, x11        // x4 = y - centroY
+    mul x3, x3, x3         // x3²
+    mul x4, x4, x4         // x4²
+    add x5, x3, x4         // x5 = x3² + x4²
 
-    // radio²
-    mul x6, x12, x12
+    mul x6, x12, x12       // radio²
     cmp x5, x6
     bgt noPintar
 
     // offset = (y * width + x) * 4
-    mul x7, x1, x13
-    add x7, x7, x2
+    mul x7, x1, x13       // x7 = y * 4
+    add x7, x7, x2	  // x7 + heigh
     lsl x7, x7, 2         // *4
     add x8, x20, x7       // dirección del pixel
 
-    str w15, [x8]         // pintar pixel
+    str w15, [x8]         // pinta pixel
 
 noPintar:
     add x2, x2, 1
@@ -200,7 +138,8 @@ finCirculo:
   b InfLoop
 	//---------------------------------------------------------------
 	// Infinite Loop
-*/ 
+
+ 
 seteo_rombo:
 //todo menos x4 puede cambiarse a conveniencia
 /*
